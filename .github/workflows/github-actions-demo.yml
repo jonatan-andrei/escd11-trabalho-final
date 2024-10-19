@@ -20,3 +20,14 @@ jobs:
       # Step 3: Build the project with Maven
       - name: Build with Maven
         run: mvn -B clean compile
+        
+  checkstyle:
+    runs-on: ubuntu-latest
+    name: checkstyle
+    steps:
+      - uses: actions/checkout@v3
+      - uses: dbelyaev/action-checkstyle@master
+        with:
+          github_token: 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
+          reporter: github-pr-review
+          checkstyle_config: google_checks.xml
