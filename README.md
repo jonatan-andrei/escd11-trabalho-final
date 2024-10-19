@@ -1,66 +1,98 @@
-# getting-started
+# ESCD11 - Trabalho final
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
-
-If you want to learn more about Quarkus, please visit its website: <https://quarkus.io/>.
-
-## Running the application in dev mode
-
-You can run your application in dev mode that enables live coding using:
+## Executando a aplicação em modo desenvolvimento
 
 ```shell script
 ./mvnw compile quarkus:dev
 ```
 
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at <http://localhost:8080/q/dev/>.
+## Uso de versionamento
 
-## Packaging and running the application
+Usamos o Git Bash ou a UI do GitHub para criação de branches.
 
-The application can be packaged using:
+## Fluxo de controle de versão
 
-```shell script
-./mvnw package
+![GitFlow](gitflow.png)
+
+`main`: A branch principal, que representa o ambiente de produção;
+
+`dev`: A branch de desenvolvimento, que é a origem das tasks de desenvolvimento e o destino final. Após uma determinada quantidade de demandas terem sido desenvolvidas, a branch é mergeada com a branch main;
+
+`tk`: A branch onde o código é desenvolvido pelos desenvolvedores e posteriormente revisado. Após aprovado é mergeado com a branch dev; Ao iniciar uma nova tarefa, o desenvolvedor deve criar uma nova branch tk a partir da develop.
+
+Para editar o diagrama:
+```
+---
+title: Git Flow
+---
+gitGraph
+   commit
+   branch dev
+   checkout dev
+   branch TK1
+   checkout TK1
+   commit
+   commit
+   checkout dev
+   merge TK1
+   branch TK2
+   commit
+   checkout dev
+   branch TK3
+   commit
+   commit
+   checkout TK2
+   commit
+   checkout dev
+   merge TK2
+   checkout dev
+   merge TK3
+   checkout main
+   merge dev
+```
+Site para edição: https://mermaid.live/edit#
+
+## Convenção de commits
+Utilizamos os Conventional Commits para manter uma padronização no time.
+
+Referências:
+- https://www.conventionalcommits.org/pt-br/v1.0.0/
+- https://github.com/iuricode/padroes-de-commits
+- https://medium.com/linkapi-solutions/conventional-commits-pattern-3778d1a1e657
+
+O padrão que seguimos pode ser visto nos exemplos abaixo:
+```
+build: create project
+feat: implement product registration flow
+fix: remove wrong method
 ```
 
-It produces the `quarkus-run.jar` file in the `target/quarkus-app/` directory.
-Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/quarkus-app/lib/` directory.
+# Pipeline
 
-The application is now runnable using `java -jar target/quarkus-app/quarkus-run.jar`.
+## Descrição do pipeline
+Nosso processo de pipeline visa garantir a qualidade da entrega de cada TK, executando o build da aplicação, executando testes e realizando uma análise estática do código. Utilizamos o Github Actions para automatizar o processo.
 
-If you want to build an _über-jar_, execute the following command:
+Nosso processo pode ser visto em: .github/workflows/github-actions-demo.yml
 
-```shell script
-./mvnw package -Dquarkus.package.jar.type=uber-jar
+## Diagrama das fases do pipeline
+![Pipeline](pipeline.png)
+
+Para editar o diagrama
 ```
-
-The application, packaged as an _über-jar_, is now runnable using `java -jar target/*-runner.jar`.
-
-## Creating a native executable
-
-You can create a native executable using:
-
-```shell script
-./mvnw package -Dnative
+flowchart TD
+    A[Build] --> B[Análise estática] --> C[Execução dos testes]
 ```
+Site para edição: https://mermaid.live/edit#
 
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using:
+## Modo de execução do pipeline
+O processo de pipeline é executado a cada commit. Optamos por não restringir a branches principais já que é importante para o desenvolvedor ver se sua entrega está correta antes de entregá-la.
 
-```shell script
-./mvnw package -Dnative -Dquarkus.native.container-build=true
-```
+## Etapa de build
+A etapa de build realiza a compilação da aplicação. Para isso, utilizamos a JDK (Java) na versão 21 e o Maven com o comando `mvn -B clean compile`.
 
-You can then execute your native executable with: `./target/getting-started-1.0.0-SNAPSHOT-runner`
+## Análise estática
+Para análise estática utilizamos o action-checkstyle, a documentação pode ser vista em: https://github.com/marketplace/actions/checkstyle-for-java
+São verificadas questões como espaçamento, identação, nomenclaturas, etc.
 
-If you want to learn more about building native executables, please consult <https://quarkus.io/guides/maven-tooling>.
-
-## Related Guides
-
-- REST ([guide](https://quarkus.io/guides/rest)): A Jakarta REST implementation utilizing build time processing and Vert.x. This extension is not compatible with the quarkus-resteasy extension, or any of the extensions that depend on it.
-
-## Provided Code
-
-### REST
-
-Easily start your REST Web Services
-
-[Related guide section...](https://quarkus.io/guides/getting-started-reactive#reactive-jax-rs-resources)
+## Testes automatizados
+Os testes unitários da aplicação são executados utilizando o próprio Maven, com o comando `mvn test`.
