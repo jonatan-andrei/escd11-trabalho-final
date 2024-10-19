@@ -77,6 +77,13 @@ Nosso processo pode ser visto em: .github/workflows/github-actions-demo.yml
 ## Diagrama das fases do pipeline
 ![Pipeline](pipeline.png)
 
+Para editar o diagrama
+```
+flowchart TD
+    A[Build] --> B[Execução dos testes] --> C[Análise estática]
+```
+Site para edição: https://mermaid.live/edit#
+
 ## Modo de execução do pipeline
 O processo de pipeline é executado a cada commit. Optamos por não restringir a branches principais já que é importante para o desenvolvedor ver se sua entrega está correta antes de entregá-la.
 
