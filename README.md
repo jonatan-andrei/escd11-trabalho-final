@@ -80,7 +80,7 @@ Nosso processo pode ser visto em: .github/workflows/github-actions-demo.yml
 Para editar o diagrama
 ```
 flowchart TD
-    A[Build] --> B[Execução dos testes] --> C[Análise estática]
+    A[Build] --> B[Análise estática] --> C[Execução dos testes]
 ```
 Site para edição: https://mermaid.live/edit#
 
@@ -88,11 +88,11 @@ Site para edição: https://mermaid.live/edit#
 O processo de pipeline é executado a cada commit. Optamos por não restringir a branches principais já que é importante para o desenvolvedor ver se sua entrega está correta antes de entregá-la.
 
 ## Etapa de build
-A etapa de build realiza a compilação da aplicação. Para isso, utilizamos a JDK (Java) na versão 21 e o Maven com o comando `mvn -B clean compile`
-
-## Testes automatizados
-Os testes unitários da aplicação são executados utilizando o próprio Maven, com o comando `mvn test`.
+A etapa de build realiza a compilação da aplicação. Para isso, utilizamos a JDK (Java) na versão 21 e o Maven com o comando `mvn -B clean compile`.
 
 ## Análise estática
 Para análise estática utilizamos o action-checkstyle, a documentação pode ser vista em: https://github.com/marketplace/actions/checkstyle-for-java
 São verificadas questões como espaçamento, identação, nomenclaturas, etc.
+
+## Testes automatizados
+Os testes unitários da aplicação são executados utilizando o próprio Maven, com o comando `mvn test`.
